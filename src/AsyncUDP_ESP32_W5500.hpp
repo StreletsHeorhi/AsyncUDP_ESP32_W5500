@@ -1,14 +1,14 @@
 /****************************************************************************************************************************
   AsyncUDP_ESP32_W5500.hpp
-  
+
   AsyncUDP_ESP32_W5500 is a Async UDP library for the ESP32_W5500 (ESP32 + LwIP W5500)
-  
+
   Based on and modified from ESPAsyncUDP Library (https://github.com/me-no-dev/ESPAsyncUDP)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncUDP_ESP32_W5500
   Licensed under GPLv3 license
-  
+
   Version: 2.0.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.0.0   K Hoang      28/11/2022 Initial coding for ESP32_W5500. Bump up version to v2.0.0 to sync with AsyncUDP v2.0.0
@@ -23,19 +23,19 @@
 
 #include <WebServer_ESP32_W5500.hpp>     // https://github.com/khoih-prog/WebServer_ESP32_W5500
 
-class AsyncUDP;
-class AsyncUDPPacket;
-class AsyncUDPMessage;
+class EthernetAsyncUDP;
+class EthernetAsyncUDPPacket;
+class EthernetAsyncUDPMessage;
 struct udp_pcb;
 struct pbuf;
 struct netif;
 
-typedef std::function<void(AsyncUDPPacket& packet)> AuPacketHandlerFunction;
-typedef std::function<void(void * arg, AsyncUDPPacket& packet)> AuPacketHandlerFunctionWithArg;
+typedef std::function<void(EthernetAsyncUDPPacket& packet)> EaPacketHandlerFunction;
+typedef std::function<void(void * arg, EthernetAsyncUDPPacket& packet)> EaPacketHandlerFunctionWithArg;
 
 ////////////////////////////////////////////////
 
-class AsyncUDPMessage : public Print
+class EthernetAsyncUDPMessage : public Print
 {
   protected:
     uint8_t * _buffer;
@@ -43,8 +43,8 @@ class AsyncUDPMessage : public Print
     size_t    _size;
     
   public:
-    AsyncUDPMessage(size_t size = CONFIG_TCP_MSS);
-    virtual ~AsyncUDPMessage();
+    EthernetAsyncUDPMessage(size_t size = CONFIG_TCP_MSS);
+    virtual ~EthernetAsyncUDPMessage();
     
     size_t    write(const uint8_t *data, size_t len);
     size_t    write(uint8_t data);
@@ -61,11 +61,10 @@ class AsyncUDPMessage : public Print
 
 ////////////////////////////////////////////////
 
-class AsyncUDPPacket : public Stream
+class EthernetAsyncUDPPacket : public Stream
 {
   protected:
-  
-    AsyncUDP *          _udp;
+    EthernetAsyncUDP *   _udp;
     pbuf *              _pb;
     tcpip_adapter_if_t  _if;
     ip_addr_t           _localIp;
@@ -78,9 +77,9 @@ class AsyncUDPPacket : public Stream
     size_t              _index;
     
   public:
-    AsyncUDPPacket(AsyncUDPPacket &packet);
-    AsyncUDPPacket(AsyncUDP *udp, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif * netif);
-    virtual ~AsyncUDPPacket();
+    EthernetAsyncUDPPacket(EthernetAsyncUDPPacket &packet);
+    EthernetAsyncUDPPacket(EthernetAsyncUDP *udp, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif * netif);
+    virtual ~EthernetAsyncUDPPacket();
 
     uint8_t * data();
     size_t    length();
@@ -98,7 +97,7 @@ class AsyncUDPPacket : public Stream
     uint16_t    remotePort();
     void        remoteMac(uint8_t * mac);
 
-    size_t send(AsyncUDPMessage &message);
+    size_t send(EthernetAsyncUDPMessage &message);
 
     int     available();
     size_t  read(uint8_t *data, size_t len);
@@ -112,26 +111,23 @@ class AsyncUDPPacket : public Stream
 
 ////////////////////////////////////////////////
 
-class AsyncUDP : public Print
+class EthernetAsyncUDP : public Print
 {
   protected:
-  
     udp_pcb *_pcb;
-    //xSemaphoreHandle _lock;
     bool _connected;
     esp_err_t _lastErr;
-    AuPacketHandlerFunction _handler;
+    EaPacketHandlerFunction _handler;
 
     bool _init();
     void _recv(udp_pcb *upcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif * netif);
 
   public:
-  
-    AsyncUDP();
-    virtual ~AsyncUDP();
+    EthernetAsyncUDP();
+    virtual ~EthernetAsyncUDP();
 
-    void onPacket(AuPacketHandlerFunctionWithArg cb, void * arg = NULL);
-    void onPacket(AuPacketHandlerFunction cb);
+    void onPacket(EaPacketHandlerFunctionWithArg cb, void * arg = NULL);
+    void onPacket(EaPacketHandlerFunction cb);
 
     bool listen(const ip_addr_t *addr, uint16_t port);
     bool listen(const IPAddress addr, uint16_t port);
@@ -159,13 +155,13 @@ class AsyncUDP : public Print
     size_t broadcast(uint8_t *data, size_t len);
     size_t broadcast(const char * data);
 
-    size_t sendTo(AsyncUDPMessage &message, const ip_addr_t *addr, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
-    size_t sendTo(AsyncUDPMessage &message, const IPAddress addr, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
-    size_t sendTo(AsyncUDPMessage &message, const IPv6Address addr, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
-    size_t send(AsyncUDPMessage &message);
+    size_t sendTo(EthernetAsyncUDPMessage &message, const ip_addr_t *addr, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
+    size_t sendTo(EthernetAsyncUDPMessage &message, const IPAddress addr, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
+    size_t sendTo(EthernetAsyncUDPMessage &message, const IPv6Address addr, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
+    size_t send(EthernetAsyncUDPMessage &message);
 
-    size_t broadcastTo(AsyncUDPMessage &message, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
-    size_t broadcast(AsyncUDPMessage &message);
+    size_t broadcastTo(EthernetAsyncUDPMessage &message, uint16_t port, tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX);
+    size_t broadcast(EthernetAsyncUDPMessage &message);
 
     IPAddress   listenIP();
     IPv6Address listenIPv6();
@@ -178,6 +174,5 @@ class AsyncUDP : public Print
 };
 
 ////////////////////////////////////////////////
-
 
 #endif    //ASYNC_UDP_ESP32_W5500_HPP
