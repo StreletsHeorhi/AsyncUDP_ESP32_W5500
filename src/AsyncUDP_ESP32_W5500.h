@@ -16,8 +16,8 @@
 
 #pragma once
 
-#ifndef ASYNC_UDP_ESP32_W5500_H
-#define ASYNC_UDP_ESP32_W5500_H
+#ifndef ETHERNET_ASYNC_UDP_ESP32_W5500_H
+#define ETHERNET_ASYNC_UDP_ESP32_W5500_H
 
 ////////////////////////////////////////////////
 
@@ -69,4 +69,4 @@ extern "C"
 
 ////////////////////////////////////////////////
 
-#endif    //ASYNC_UDP_ESP32_W5500_H
+#endif    //ETHERNET_ASYNC_UDP_ESP32_W5500_H

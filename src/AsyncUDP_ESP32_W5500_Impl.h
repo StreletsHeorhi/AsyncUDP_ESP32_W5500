@@ -68,7 +68,7 @@ typedef struct
   err_t err;
 } udp_api_call_t;
 
-static err_t _udp_connect_api(struct tcpip_api_call_data *api_call_msg)
+inline static err_t _udp_connect_api(struct tcpip_api_call_data *api_call_msg)
 {
   udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
   msg->err = udp_connect(msg->pcb, msg->addr, msg->port);
@@ -78,7 +78,7 @@ static err_t _udp_connect_api(struct tcpip_api_call_data *api_call_msg)
   return msg->err;
 }
 
-static err_t _udp_connect(struct udp_pcb *pcb, const ip_addr_t *addr, u16_t port)
+inline static err_t _udp_connect(struct udp_pcb *pcb, const ip_addr_t *addr, u16_t port)
 {
   udp_api_call_t msg;
   msg.pcb = pcb;
@@ -91,7 +91,7 @@ static err_t _udp_connect(struct udp_pcb *pcb, const ip_addr_t *addr, u16_t port
   return msg.err;
 }
 
-static err_t _udp_disconnect_api(struct tcpip_api_call_data *api_call_msg)
+inline static err_t _udp_disconnect_api(struct tcpip_api_call_data *api_call_msg)
 {
   udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
   msg->err = 0;
@@ -102,14 +102,14 @@ static err_t _udp_disconnect_api(struct tcpip_api_call_data *api_call_msg)
   return msg->err;
 }
 
-static void  _udp_disconnect(struct udp_pcb *pcb)
+inline static void  _udp_disconnect(struct udp_pcb *pcb)
 {
   udp_api_call_t msg;
   msg.pcb = pcb;
   tcpip_api_call(_udp_disconnect_api, (struct tcpip_api_call_data*)&msg);
 }
 
-static err_t _udp_remove_api(struct tcpip_api_call_data *api_call_msg)
+inline static err_t _udp_remove_api(struct tcpip_api_call_data *api_call_msg)
 {
   udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
   msg->err = 0;
@@ -120,14 +120,14 @@ static err_t _udp_remove_api(struct tcpip_api_call_data *api_call_msg)
   return msg->err;
 }
 
-static void  _udp_remove(struct udp_pcb *pcb)
+inline static void  _udp_remove(struct udp_pcb *pcb)
 {
   udp_api_call_t msg;
   msg.pcb = pcb;
   tcpip_api_call(_udp_remove_api, (struct tcpip_api_call_data*)&msg);
 }
 
-static err_t _udp_bind_api(struct tcpip_api_call_data *api_call_msg)
+inline static err_t _udp_bind_api(struct tcpip_api_call_data *api_call_msg)
 {
   udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
   msg->err = udp_bind(msg->pcb, msg->addr, msg->port);
@@ -137,7 +137,7 @@ static err_t _udp_bind_api(struct tcpip_api_call_data *api_call_msg)
   return msg->err;
 }
 
-static err_t _udp_bind(struct udp_pcb *pcb, const ip_addr_t *addr, u16_t port)
+inline static err_t _udp_bind(struct udp_pcb *pcb, const ip_addr_t *addr, u16_t port)
 {
   udp_api_call_t msg;
   msg.pcb = pcb;
@@ -150,7 +150,7 @@ static err_t _udp_bind(struct udp_pcb *pcb, const ip_addr_t *addr, u16_t port)
   return msg.err;
 }
 
-static err_t _udp_sendto_api(struct tcpip_api_call_data *api_call_msg)
+inline static err_t _udp_sendto_api(struct tcpip_api_call_data *api_call_msg)
 {
   udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
   msg->err = udp_sendto(msg->pcb, msg->pb, msg->addr, msg->port);
@@ -160,7 +160,7 @@ static err_t _udp_sendto_api(struct tcpip_api_call_data *api_call_msg)
   return msg->err;
 }
 
-static err_t _udp_sendto(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *addr, u16_t port)
+inline static err_t _udp_sendto(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *addr, u16_t port)
 {
   udp_api_call_t msg;
   msg.pcb = pcb;
@@ -174,7 +174,7 @@ static err_t _udp_sendto(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *
   return msg.err;
 }
 
-static err_t _udp_sendto_if_api(struct tcpip_api_call_data *api_call_msg)
+inline static err_t _udp_sendto_if_api(struct tcpip_api_call_data *api_call_msg)
 {
   udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
   msg->err = udp_sendto_if(msg->pcb, msg->pb, msg->addr, msg->port, msg->netif);
@@ -184,7 +184,7 @@ static err_t _udp_sendto_if_api(struct tcpip_api_call_data *api_call_msg)
   return msg->err;
 }
 
-static err_t _udp_sendto_if(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *addr, u16_t port,
+inline static err_t _udp_sendto_if(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *addr, u16_t port,
                             struct netif *netif)
 {
   udp_api_call_t msg;
@@ -215,7 +215,7 @@ typedef struct
 static xQueueHandle _udp_queue;
 static volatile TaskHandle_t _udp_task_handle = NULL;
 
-static void _udp_task(void *pvParameters)
+inline static void _udp_task(void *pvParameters)
 {
   lwip_event_packet_t * e = NULL;
 
@@ -238,7 +238,7 @@ static void _udp_task(void *pvParameters)
   vTaskDelete(NULL);
 }
 
-static bool _udp_task_start()
+inline static bool _udp_task_start()
 {
   if (!_udp_queue)
   {
@@ -264,7 +264,7 @@ static bool _udp_task_start()
   return true;
 }
 
-static bool _udp_task_post(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif *netif)
+inline static bool _udp_task_post(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif *netif)
 {
   if (!_udp_task_handle || !_udp_queue)
   {
@@ -295,7 +295,7 @@ static bool _udp_task_post(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *a
   return true;
 }
 
-static void _udp_recv(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, uint16_t port)
+inline static void _udp_recv(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, uint16_t port)
 {
   while (pb != NULL)
   {
@@ -347,7 +347,7 @@ static void _udp_recv(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, 
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDPMessage::EthernetAsyncUDPMessage(size_t size)
+inline EthernetAsyncUDPMessage::EthernetAsyncUDPMessage(size_t size)
 {
   _index = 0;
 
@@ -362,7 +362,7 @@ EthernetAsyncUDPMessage::EthernetAsyncUDPMessage(size_t size)
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDPMessage::~EthernetAsyncUDPMessage()
+inline EthernetAsyncUDPMessage::~EthernetAsyncUDPMessage()
 {
   if (_buffer)
   {
@@ -372,7 +372,7 @@ EthernetAsyncUDPMessage::~EthernetAsyncUDPMessage()
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPMessage::write(const uint8_t *data, size_t len)
+inline size_t EthernetAsyncUDPMessage::write(const uint8_t *data, size_t len)
 {
   if (_buffer == NULL)
   {
@@ -396,14 +396,14 @@ size_t EthernetAsyncUDPMessage::write(const uint8_t *data, size_t len)
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPMessage::write(uint8_t data)
+inline size_t EthernetAsyncUDPMessage::write(uint8_t data)
 {
   return write(&data, 1);
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPMessage::space()
+inline size_t EthernetAsyncUDPMessage::space()
 {
   if (_buffer == NULL)
   {
@@ -417,28 +417,28 @@ size_t EthernetAsyncUDPMessage::space()
 
 ////////////////////////////////////////////////
 
-uint8_t * EthernetAsyncUDPMessage::data()
+inline uint8_t * EthernetAsyncUDPMessage::data()
 {
   return _buffer;
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPMessage::length()
+inline size_t EthernetAsyncUDPMessage::length()
 {
   return _index;
 }
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDPMessage::flush()
+inline void EthernetAsyncUDPMessage::flush()
 {
   _index = 0;
 }
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDPPacket::EthernetAsyncUDPPacket(EthernetAsyncUDPPacket &packet)
+inline EthernetAsyncUDPPacket::EthernetAsyncUDPPacket(EthernetAsyncUDPPacket &packet)
 {
   _udp    = packet._udp;
   _pb     = packet._pb;
@@ -458,7 +458,7 @@ EthernetAsyncUDPPacket::EthernetAsyncUDPPacket(EthernetAsyncUDPPacket &packet)
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDPPacket::EthernetAsyncUDPPacket(EthernetAsyncUDP *udp, pbuf *pb, const ip_addr_t *raddr, uint16_t rport, struct netif * ntif)
+inline EthernetAsyncUDPPacket::EthernetAsyncUDPPacket(EthernetAsyncUDP *udp, pbuf *pb, const ip_addr_t *raddr, uint16_t rport, struct netif * ntif)
 {
   _udp    = udp;
   _pb     = pb;
@@ -514,35 +514,35 @@ EthernetAsyncUDPPacket::EthernetAsyncUDPPacket(EthernetAsyncUDP *udp, pbuf *pb, 
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDPPacket::~EthernetAsyncUDPPacket()
+inline EthernetAsyncUDPPacket::~EthernetAsyncUDPPacket()
 {
   pbuf_free(_pb);
 }
 
 ////////////////////////////////////////////////
 
-uint8_t * EthernetAsyncUDPPacket::data()
+inline uint8_t * EthernetAsyncUDPPacket::data()
 {
   return _data;
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPPacket::length()
+inline size_t EthernetAsyncUDPPacket::length()
 {
   return _len;
 }
 
 ////////////////////////////////////////////////
 
-int EthernetAsyncUDPPacket::available()
+inline int EthernetAsyncUDPPacket::available()
 {
   return _len - _index;
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPPacket::read(uint8_t *data, size_t len)
+inline size_t EthernetAsyncUDPPacket::read(uint8_t *data, size_t len)
 {
   size_t i;
   size_t a = _len - _index;
@@ -562,7 +562,7 @@ size_t EthernetAsyncUDPPacket::read(uint8_t *data, size_t len)
 
 ////////////////////////////////////////////////
 
-int EthernetAsyncUDPPacket::read()
+inline int EthernetAsyncUDPPacket::read()
 {
   if (_index < _len)
   {
@@ -574,7 +574,7 @@ int EthernetAsyncUDPPacket::read()
 
 ////////////////////////////////////////////////
 
-int EthernetAsyncUDPPacket::peek()
+inline int EthernetAsyncUDPPacket::peek()
 {
   if (_index < _len)
   {
@@ -586,21 +586,21 @@ int EthernetAsyncUDPPacket::peek()
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDPPacket::flush()
+inline void EthernetAsyncUDPPacket::flush()
 {
   _index = _len;
 }
 
 ////////////////////////////////////////////////
 
-tcpip_adapter_if_t EthernetAsyncUDPPacket::interface()
+inline tcpip_adapter_if_t EthernetAsyncUDPPacket::interface()
 {
   return _if;
 }
 
 ////////////////////////////////////////////////
 
-IPAddress EthernetAsyncUDPPacket::localIP()
+inline IPAddress EthernetAsyncUDPPacket::localIP()
 {
   if (_localIp.type != IPADDR_TYPE_V4)
   {
@@ -612,7 +612,7 @@ IPAddress EthernetAsyncUDPPacket::localIP()
 
 ////////////////////////////////////////////////
 
-IPv6Address EthernetAsyncUDPPacket::localIPv6()
+inline IPv6Address EthernetAsyncUDPPacket::localIPv6()
 {
   if (_localIp.type != IPADDR_TYPE_V6)
   {
@@ -624,14 +624,14 @@ IPv6Address EthernetAsyncUDPPacket::localIPv6()
 
 ////////////////////////////////////////////////
 
-uint16_t EthernetAsyncUDPPacket::localPort()
+inline uint16_t EthernetAsyncUDPPacket::localPort()
 {
   return _localPort;
 }
 
 ////////////////////////////////////////////////
 
-IPAddress EthernetAsyncUDPPacket::remoteIP()
+inline IPAddress EthernetAsyncUDPPacket::remoteIP()
 {
   if (_remoteIp.type != IPADDR_TYPE_V4)
   {
@@ -643,7 +643,7 @@ IPAddress EthernetAsyncUDPPacket::remoteIP()
 
 ////////////////////////////////////////////////
 
-IPv6Address EthernetAsyncUDPPacket::remoteIPv6()
+inline IPv6Address EthernetAsyncUDPPacket::remoteIPv6()
 {
   if (_remoteIp.type != IPADDR_TYPE_V6)
   {
@@ -655,28 +655,28 @@ IPv6Address EthernetAsyncUDPPacket::remoteIPv6()
 
 ////////////////////////////////////////////////
 
-uint16_t EthernetAsyncUDPPacket::remotePort()
+inline uint16_t EthernetAsyncUDPPacket::remotePort()
 {
   return _remotePort;
 }
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDPPacket::remoteMac(uint8_t * mac)
+inline void EthernetAsyncUDPPacket::remoteMac(uint8_t * mac)
 {
   memcpy(mac, _remoteMac, 6);
 }
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDPPacket::isIPv6()
+inline bool EthernetAsyncUDPPacket::isIPv6()
 {
   return _localIp.type == IPADDR_TYPE_V6;
 }
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDPPacket::isBroadcast()
+inline bool EthernetAsyncUDPPacket::isBroadcast()
 {
   if (_localIp.type == IPADDR_TYPE_V6)
   {
@@ -690,14 +690,14 @@ bool EthernetAsyncUDPPacket::isBroadcast()
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDPPacket::isMulticast()
+inline bool EthernetAsyncUDPPacket::isMulticast()
 {
   return ip_addr_ismulticast(&(_localIp));
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPPacket::write(const uint8_t *data, size_t len)
+inline size_t EthernetAsyncUDPPacket::write(const uint8_t *data, size_t len)
 {
   if (!data)
   {
@@ -711,21 +711,21 @@ size_t EthernetAsyncUDPPacket::write(const uint8_t *data, size_t len)
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPPacket::write(uint8_t data)
+inline size_t EthernetAsyncUDPPacket::write(uint8_t data)
 {
   return write(&data, 1);
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDPPacket::send(EthernetAsyncUDPMessage &message)
+inline size_t EthernetAsyncUDPPacket::send(EthernetAsyncUDPMessage &message)
 {
   return write(message.data(), message.length());
 }
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::_init()
+inline bool EthernetAsyncUDP::_init()
 {
   if (_pcb)
   {
@@ -747,7 +747,7 @@ bool EthernetAsyncUDP::_init()
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDP::EthernetAsyncUDP()
+inline EthernetAsyncUDP::EthernetAsyncUDP()
 {
   _pcb = NULL;
   _connected = false;
@@ -757,7 +757,7 @@ EthernetAsyncUDP::EthernetAsyncUDP()
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDP::~EthernetAsyncUDP()
+inline EthernetAsyncUDP::~EthernetAsyncUDP()
 {
   close();
   UDP_MUTEX_LOCK();
@@ -772,7 +772,7 @@ EthernetAsyncUDP::~EthernetAsyncUDP()
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDP::close()
+inline void EthernetAsyncUDP::close()
 {
   UDP_MUTEX_LOCK();
 
@@ -792,7 +792,7 @@ void EthernetAsyncUDP::close()
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::connect(const ip_addr_t *addr, uint16_t port)
+inline bool EthernetAsyncUDP::connect(const ip_addr_t *addr, uint16_t port)
 {
   if (!_udp_task_start())
   {
@@ -832,7 +832,7 @@ bool EthernetAsyncUDP::connect(const ip_addr_t *addr, uint16_t port)
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listen(const ip_addr_t *addr, uint16_t port)
+inline bool EthernetAsyncUDP::listen(const ip_addr_t *addr, uint16_t port)
 {
   if (!_udp_task_start())
   {
@@ -877,7 +877,7 @@ bool EthernetAsyncUDP::listen(const ip_addr_t *addr, uint16_t port)
 
 ////////////////////////////////////////////////
 
-static esp_err_t joinMulticastGroup(const ip_addr_t *addr, bool join,
+inline static esp_err_t joinMulticastGroup(const ip_addr_t *addr, bool join,
                                     tcpip_adapter_if_t tcpip_if = TCPIP_ADAPTER_IF_MAX)
 {
   struct netif * netif = NULL;
@@ -982,7 +982,7 @@ static esp_err_t joinMulticastGroup(const ip_addr_t *addr, bool join,
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listenMulticast(const ip_addr_t *addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
+inline bool EthernetAsyncUDP::listenMulticast(const ip_addr_t *addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
 {
   if (!ip_addr_ismulticast(addr))
   {
@@ -1019,7 +1019,7 @@ bool EthernetAsyncUDP::listenMulticast(const ip_addr_t *addr, uint16_t port, uin
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::writeTo(const uint8_t * data, size_t len, const ip_addr_t * addr, uint16_t port,
+inline size_t EthernetAsyncUDP::writeTo(const uint8_t * data, size_t len, const ip_addr_t * addr, uint16_t port,
                          tcpip_adapter_if_t tcpip_if)
 {
   if (!_pcb)
@@ -1093,7 +1093,7 @@ size_t EthernetAsyncUDP::writeTo(const uint8_t * data, size_t len, const ip_addr
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDP::_recv(udp_pcb *upcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif * netif)
+inline void EthernetAsyncUDP::_recv(udp_pcb *upcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif * netif)
 {
   while (pb != NULL)
   {
@@ -1113,21 +1113,21 @@ void EthernetAsyncUDP::_recv(udp_pcb *upcb, pbuf *pb, const ip_addr_t *addr, uin
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDP::_s_recv(void *arg, udp_pcb *upcb, pbuf *p, const ip_addr_t *addr, uint16_t port, struct netif * netif)
+inline void EthernetAsyncUDP::_s_recv(void *arg, udp_pcb *upcb, pbuf *p, const ip_addr_t *addr, uint16_t port, struct netif * netif)
 {
   reinterpret_cast<EthernetAsyncUDP*>(arg)->_recv(upcb, p, addr, port, netif);
 }
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listen(uint16_t port)
+inline bool EthernetAsyncUDP::listen(uint16_t port)
 {
   return listen(IP_ANY_TYPE, port);
 }
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listen(const IPAddress addr, uint16_t port)
+inline bool EthernetAsyncUDP::listen(const IPAddress addr, uint16_t port)
 {
   ip_addr_t laddr;
   laddr.type = IPADDR_TYPE_V4;
@@ -1138,7 +1138,7 @@ bool EthernetAsyncUDP::listen(const IPAddress addr, uint16_t port)
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listenMulticast(const IPAddress addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
+inline bool EthernetAsyncUDP::listenMulticast(const IPAddress addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
 {
   ip_addr_t laddr;
   laddr.type = IPADDR_TYPE_V4;
@@ -1149,7 +1149,7 @@ bool EthernetAsyncUDP::listenMulticast(const IPAddress addr, uint16_t port, uint
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::connect(const IPAddress addr, uint16_t port)
+inline bool EthernetAsyncUDP::connect(const IPAddress addr, uint16_t port)
 {
   ip_addr_t daddr;
   daddr.type = IPADDR_TYPE_V4;
@@ -1160,7 +1160,7 @@ bool EthernetAsyncUDP::connect(const IPAddress addr, uint16_t port)
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::writeTo(const uint8_t *data, size_t len, const IPAddress addr, uint16_t port,
+inline size_t EthernetAsyncUDP::writeTo(const uint8_t *data, size_t len, const IPAddress addr, uint16_t port,
                          tcpip_adapter_if_t tcpip_if)
 {
   ip_addr_t daddr;
@@ -1172,7 +1172,7 @@ size_t EthernetAsyncUDP::writeTo(const uint8_t *data, size_t len, const IPAddres
 
 ////////////////////////////////////////////////
 
-IPAddress EthernetAsyncUDP::listenIP()
+inline IPAddress EthernetAsyncUDP::listenIP()
 {
   if (!_pcb || _pcb->remote_ip.type != IPADDR_TYPE_V4)
   {
@@ -1184,7 +1184,7 @@ IPAddress EthernetAsyncUDP::listenIP()
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listen(const IPv6Address addr, uint16_t port)
+inline bool EthernetAsyncUDP::listen(const IPv6Address addr, uint16_t port)
 {
   ip_addr_t laddr;
   laddr.type = IPADDR_TYPE_V6;
@@ -1195,7 +1195,7 @@ bool EthernetAsyncUDP::listen(const IPv6Address addr, uint16_t port)
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::listenMulticast(const IPv6Address addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
+inline bool EthernetAsyncUDP::listenMulticast(const IPv6Address addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
 {
   ip_addr_t laddr;
   laddr.type = IPADDR_TYPE_V6;
@@ -1206,7 +1206,7 @@ bool EthernetAsyncUDP::listenMulticast(const IPv6Address addr, uint16_t port, ui
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::connect(const IPv6Address addr, uint16_t port)
+inline bool EthernetAsyncUDP::connect(const IPv6Address addr, uint16_t port)
 {
   ip_addr_t daddr;
   daddr.type = IPADDR_TYPE_V6;
@@ -1217,7 +1217,7 @@ bool EthernetAsyncUDP::connect(const IPv6Address addr, uint16_t port)
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::writeTo(const uint8_t *data, size_t len, const IPv6Address addr, uint16_t port,
+inline size_t EthernetAsyncUDP::writeTo(const uint8_t *data, size_t len, const IPv6Address addr, uint16_t port,
                          tcpip_adapter_if_t tcpip_if)
 {
   ip_addr_t daddr;
@@ -1229,7 +1229,7 @@ size_t EthernetAsyncUDP::writeTo(const uint8_t *data, size_t len, const IPv6Addr
 
 ////////////////////////////////////////////////
 
-IPv6Address EthernetAsyncUDP::listenIPv6()
+inline IPv6Address EthernetAsyncUDP::listenIPv6()
 {
   if (!_pcb || _pcb->remote_ip.type != IPADDR_TYPE_V6)
   {
@@ -1241,35 +1241,35 @@ IPv6Address EthernetAsyncUDP::listenIPv6()
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::write(const uint8_t *data, size_t len)
+inline size_t EthernetAsyncUDP::write(const uint8_t *data, size_t len)
 {
   return writeTo(data, len, &(_pcb->remote_ip), _pcb->remote_port);
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::write(uint8_t data)
+inline size_t EthernetAsyncUDP::write(uint8_t data)
 {
   return write(&data, 1);
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::broadcastTo(uint8_t *data, size_t len, uint16_t port, tcpip_adapter_if_t tcpip_if)
+inline size_t EthernetAsyncUDP::broadcastTo(uint8_t *data, size_t len, uint16_t port, tcpip_adapter_if_t tcpip_if)
 {
   return writeTo(data, len, IP_ADDR_BROADCAST, port, tcpip_if);
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::broadcastTo(const char * data, uint16_t port, tcpip_adapter_if_t tcpip_if)
+inline size_t EthernetAsyncUDP::broadcastTo(const char * data, uint16_t port, tcpip_adapter_if_t tcpip_if)
 {
   return broadcastTo((uint8_t *)data, strlen(data), port, tcpip_if);
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::broadcast(uint8_t *data, size_t len)
+inline size_t EthernetAsyncUDP::broadcast(uint8_t *data, size_t len)
 {
   if (_pcb->local_port != 0)
   {
@@ -1281,14 +1281,14 @@ size_t EthernetAsyncUDP::broadcast(uint8_t *data, size_t len)
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::broadcast(const char * data)
+inline size_t EthernetAsyncUDP::broadcast(const char * data)
 {
   return broadcast((uint8_t *)data, strlen(data));
 }
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const ip_addr_t *addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+inline size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const ip_addr_t *addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
 {
   if (!message)
   {
@@ -1300,7 +1300,7 @@ size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const ip_addr_
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const IPAddress addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+inline size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const IPAddress addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
 {
   if (!message)
   {
@@ -1312,7 +1312,7 @@ size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const IPAddres
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const IPv6Address addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+inline size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const IPv6Address addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
 {
   if (!message)
   {
@@ -1324,7 +1324,7 @@ size_t EthernetAsyncUDP::sendTo(EthernetAsyncUDPMessage &message, const IPv6Addr
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::send(EthernetAsyncUDPMessage &message)
+inline size_t EthernetAsyncUDP::send(EthernetAsyncUDPMessage &message)
 {
   if (!message)
   {
@@ -1336,7 +1336,7 @@ size_t EthernetAsyncUDP::send(EthernetAsyncUDPMessage &message)
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::broadcastTo(EthernetAsyncUDPMessage &message, uint16_t port, tcpip_adapter_if_t tcpip_if)
+inline size_t EthernetAsyncUDP::broadcastTo(EthernetAsyncUDPMessage &message, uint16_t port, tcpip_adapter_if_t tcpip_if)
 {
   if (!message)
   {
@@ -1348,7 +1348,7 @@ size_t EthernetAsyncUDP::broadcastTo(EthernetAsyncUDPMessage &message, uint16_t 
 
 ////////////////////////////////////////////////
 
-size_t EthernetAsyncUDP::broadcast(EthernetAsyncUDPMessage &message)
+inline size_t EthernetAsyncUDP::broadcast(EthernetAsyncUDPMessage &message)
 {
   if (!message)
   {
@@ -1360,35 +1360,35 @@ size_t EthernetAsyncUDP::broadcast(EthernetAsyncUDPMessage &message)
 
 ////////////////////////////////////////////////
 
-EthernetAsyncUDP::operator bool()
+inline EthernetAsyncUDP::operator bool()
 {
   return _connected;
 }
 
 ////////////////////////////////////////////////
 
-bool EthernetAsyncUDP::connected()
+inline bool EthernetAsyncUDP::connected()
 {
   return _connected;
 }
 
 ////////////////////////////////////////////////
 
-esp_err_t EthernetAsyncUDP::lastErr()
+inline esp_err_t EthernetAsyncUDP::lastErr()
 {
   return _lastErr;
 }
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDP::onPacket(EaPacketHandlerFunctionWithArg cb, void * arg)
+inline void EthernetAsyncUDP::onPacket(EaPacketHandlerFunctionWithArg cb, void * arg)
 {
   onPacket(std::bind(cb, arg, std::placeholders::_1));
 }
 
 ////////////////////////////////////////////////
 
-void EthernetAsyncUDP::onPacket(EaPacketHandlerFunction cb)
+inline void EthernetAsyncUDP::onPacket(EaPacketHandlerFunction cb)
 {
   _handler = cb;
 }
